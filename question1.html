@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>JonJeng's Page</title>
+        <title>JonJeng's Trivia</title>
         <link rel="icon" type="image/x-icon" href="Logo.png">
         <script>
-            function updateScoreNext(points, next){
+            function updateScore(points){
                 let score = localStorage.getItem("triviaScore") || 0;
                 score = parseInt(score) + points;
                 localStorage.setItem("triviaScore", score)
                 document.getElementById("scoreDisplay").innerText = "Score: "+score;
-
-                window.location.href = next;
             }
 
-            function resetScoreNext(){
+            function resetScore(){
                 localStorage.setItem("triviaScore", 0);
                 document.getElementById("scoreDisplay").innerText = "Score: 0";
             }
@@ -30,7 +28,7 @@
             div {text-align: center;}
 
             a:link, a:visited {
-            background-color: #5f36f4;
+            background-color: #19df19;
             color: white;
             padding: 14px 25px;
             text-align: center;
@@ -39,7 +37,7 @@
             }
 
             a:hover, a:active {
-            background-color: #4927c2;
+            background-color: #f12222;
             color: white;
             }
         
@@ -47,9 +45,14 @@
         </head>
         
     <body style="background-color:rgb(159, 230, 240);">
-        <h1>Welcome to JonJeng's World</h1>
-        <p1>Play Trivia?</p>
-        <a onclick = "resetScoreNext()" href = 'question1.html' >Let's Play</a>
+        <h1>Question 1</h1>
+        <p1>What is JonJeng's Middle Name?</p>
+        <a href="incorrect1.html">JonJeng</a>
+        <a href="incorrect1.html">Jeffery</a>
+        <a href="correct1.html">Jeremiah</a>
+        <a href="incorrect1.html">Jacob</a>
+        <a href="incorrect1.html">He Does Not Have One</a>
 
+        <p id="scoreDisplay"></p>
     </body>
 </html>

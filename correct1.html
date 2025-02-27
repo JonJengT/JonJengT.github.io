@@ -4,16 +4,14 @@
         <title>JonJeng's Page</title>
         <link rel="icon" type="image/x-icon" href="Logo.png">
         <script>
-            function updateScoreNext(points, next){
+            function updateScore(points){
                 let score = localStorage.getItem("triviaScore") || 0;
                 score = parseInt(score) + points;
                 localStorage.setItem("triviaScore", score)
                 document.getElementById("scoreDisplay").innerText = "Score: "+score;
-
-                window.location.href = next;
             }
 
-            function resetScoreNext(){
+            function resetScore(){
                 localStorage.setItem("triviaScore", 0);
                 document.getElementById("scoreDisplay").innerText = "Score: 0";
             }
@@ -47,9 +45,9 @@
         </head>
         
     <body style="background-color:rgb(159, 230, 240);">
-        <h1>Welcome to JonJeng's World</h1>
-        <p1>Play Trivia?</p>
-        <a onclick = "resetScoreNext()" href = 'question1.html' >Let's Play</a>
+        <h1>Correct!</h1>
+        <a href = 'question2.html' onclick = "updateScore(1)">Next Question</a>
 
+        <p id="scoreDisplay"></p>
     </body>
 </html>
