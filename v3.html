@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Multiple Choice Question - 3</title>
+    <style>
+        body{font-family:Arial,Helvetica,sans-serif;max-width:700px;margin:40px auto;padding:0 16px}
+        .question{margin-bottom:16px}
+        .options label{display:block;margin:6px 0;cursor:pointer}
+        .feedback{margin-top:12px;font-weight:600}
+        .correct{color:green}
+        .wrong{color:#c00}
+    </style>
+</head>
+<body>
+    <form id="mcqForm" class="mcq">
+        <div class="question">
+            <strong>Question 3:</strong> Which tag creates a hyperlink?
+        </div>
+
+        <div class="options" role="radiogroup" aria-labelledby="q2">
+            <label><input type="radio" name="answer" value="a"> A) &lt;div&gt;</label>
+            <label><input type="radio" name="answer" value="b"> B) &lt;a&gt;</label>
+            <label><input type="radio" name="answer" value="c"> C) &lt;span&gt;</label>
+            <label><input type="radio" name="answer" value="d"> D) &lt;link&gt;</label>
+        </div>
+
+        <button type="submit">Submit</button>
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+        <button id="nextBtn" type="button" style="display:none;margin-left:8px">Next</button>
+    </form>
+
+    <script>
+        (function(){
+            const form = document.getElementById('mcqForm');
+            const feedback = document.getElementById('feedback');
+            const nextBtn = document.getElementById('nextBtn');
+            const correctValue = 'b';
+
+            nextBtn.addEventListener('click', () => {
+                window.location.href = 'v4.html';
+            });
+
+            form.addEventListener('submit', function(e){
+                e.preventDefault();
+                const choice = form.answer.value;
+                if(!choice){
+                    feedback.textContent = 'Please select an option.';
+                    feedback.className = 'feedback wrong';
+                    return;
+                }
+                if(choice === correctValue){
+                    feedback.textContent = 'Correct — &lt;a&gt; creates a hyperlink.';
+                    feedback.className = 'feedback correct';
+                } else {
+                    feedback.textContent = 'Incorrect. Try again or review anchor tag usage.';
+                    feedback.className = 'feedback wrong';
+                }
+                Array.from(form.elements).forEach(el => {
+                    if(el.type === 'radio' || (el.tagName === 'BUTTON' && el.type === 'submit')) el.disabled = true;
+                });
+                nextBtn.style.display = 'inline';
+            });
+        })();
+    </script>
+</body>
+</html>
