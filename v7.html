@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Final Question - 7</title>
+    <style>
+        body{font-family:Arial,Helvetica,sans-serif;max-width:700px;margin:40px auto;padding:0 16px}
+        .question{margin-bottom:16px}
+        .options label{display:block;margin:6px 0;cursor:pointer}
+        .options label.highlight{padding:6px;border-radius:4px;background:#fff7e6;transition:transform .18s ease,font-size .18s ease,background .18s}
+        .feedback{margin-top:12px;font-weight:600}
+        .correct{color:green}
+        .wrong{color:#c00}
+    </style>
+</head>
+<body>
+    <form id="mcqForm" class="mcq">
+        <div class="question">
+            <strong>Final Question:</strong> Will you be my valentine? <br>
+
+            
+        </div>
+
+        <div class="options" role="radiogroup" aria-labelledby="q7">
+            <label><input type="radio" name="answer" value="true"> True</label>
+            <label><input type="radio" name="answer" value="false"> False</label>
+        </div>
+
+        <button type="submit">Submit</button>
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+        <div id="score" class="feedback" style="display:inline-block;margin-left:12px" aria-live="polite"></div>
+    </form>
+
+    <script>
+        (function(){
+            const form = document.getElementById('mcqForm');
+            const feedback = document.getElementById('feedback');
+            const scoreEl = document.getElementById('score');
+            // no Next button — navigation will occur automatically on correct
+            const correctValue = 'true';
+
+            function getScore(){ return Number(localStorage.getItem('quizScore') || 0); }
+            function showScore(){ scoreEl.textContent = 'Score: ' + getScore(); }
+
+            // initialize score display
+            showScore();
+
+            // reset any previous wrong-attempt visuals when entering the page
+            sessionStorage.removeItem('v7_wrong_count');
+            (function clearHint(){
+                const ci_init = form.querySelector('input[name="answer"][value="' + correctValue + '"]');
+                const cl_init = ci_init ? (ci_init.closest ? ci_init.closest('label') : ci_init.parentElement) : null;
+                if(cl_init){
+                    cl_init.classList.remove('highlight');
+                    cl_init.style.transform = '';
+                    cl_init.style.fontSize = '';
+                }
+            })();
+
+            // no Next button click handler
+
+            form.addEventListener('submit', function(e){
+                e.preventDefault();
+                const choice = form.answer.value;
+                if(!choice){
+                    feedback.textContent = 'Please select an option.';
+                    feedback.className = 'feedback wrong';
+                    return;
+                }
+                const correctInput = document.querySelector('input[name="answer"][value="' + correctValue + '"]');
+                const correctLabel = correctInput ? (correctInput.closest ? correctInput.closest('label') : correctInput.parentElement) : null;
+
+                // read and increment wrong attempt counter (per session)
+                let wrongCount = Number(sessionStorage.getItem('v7_wrong_count') || 0);
+                if(choice === correctValue){
+                    feedback.textContent = 'Congratulations! ';
+                    feedback.className = 'feedback correct';
+                    // reset wrong counter and visual hints
+                    sessionStorage.removeItem('v7_wrong_count');
+                    if(correctLabel){
+                        correctLabel.classList.remove('highlight');
+                        correctLabel.style.transform = '';
+                        correctLabel.style.fontSize = '';
+                    }
+                    // disable inputs to prevent extra submissions
+                    Array.from(form.elements).forEach(el => {
+                        if(el.type === 'radio' || (el.tagName === 'BUTTON' && el.type === 'submit')) el.disabled = true;
+                    });
+                    // navigate to v8 after a short delay so user sees the feedback
+                    setTimeout(() => { window.location.href = 'v8.html'; }, 700);
+                } else {
+                    feedback.textContent = 'Noooo please try again!';  
+                    feedback.className = 'feedback wrong';
+                    // increment counter and enlarge/highlight the correct option to hint the user
+                    wrongCount = wrongCount + 1;
+                    sessionStorage.setItem('v7_wrong_count', String(wrongCount));
+                    if(correctLabel){
+                        correctLabel.classList.add('highlight');
+                        const scale = 1 + 0.08 * wrongCount;
+                        correctLabel.style.transform = 'scale(' + scale + ')';
+                        // increase font size a bit each time
+                        const sizePercent = 100 + Math.min(30, 6 * wrongCount);
+                        correctLabel.style.fontSize = sizePercent + '%';
+                    }
+                    // deselect the user's chosen wrong answer to allow retry
+                    const chosen = form.querySelector('input[name="answer"]:checked');
+                    if(chosen) chosen.checked = false;
+                    // allow retry (do not set answered flags)
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>

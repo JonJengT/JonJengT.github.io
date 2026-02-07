@@ -16,18 +16,22 @@
 <body>
     <form id="mcqForm" class="mcq">
         <div class="question">
-            <strong>Question 3:</strong> Which tag creates a hyperlink?
+            <strong>Question 3:</strong> What is my nephew's name? <br>
+            
+            <img src="C:\Users\jjtho\OneDrive\Documents\GitHub\JonJengT.github.io\IMG_4276.jpeg" alt="Nephew" width="233" height="308">
+            
         </div>
 
-        <div class="options" role="radiogroup" aria-labelledby="q2">
-            <label><input type="radio" name="answer" value="a"> A) &lt;div&gt;</label>
-            <label><input type="radio" name="answer" value="b"> B) &lt;a&gt;</label>
-            <label><input type="radio" name="answer" value="c"> C) &lt;span&gt;</label>
-            <label><input type="radio" name="answer" value="d"> D) &lt;link&gt;</label>
+        <div class="options" role="radiogroup" aria-labelledby="q3">
+            <label><input type="radio" name="answer" value="a"> A) Cheng</label>
+            <label><input type="radio" name="answer" value="b"> B) Samuel</label>
+            <label><input type="radio" name="answer" value="c"> C) Chang</label>
+            <label><input type="radio" name="answer" value="d"> D) Christopher</label>
         </div>
 
         <button type="submit">Submit</button>
         <div id="feedback" class="feedback" aria-live="polite"></div>
+        <div id="score" class="feedback" style="display:inline-block;margin-left:12px" aria-live="polite"></div>
         <button id="nextBtn" type="button" style="display:none;margin-left:8px">Next</button>
     </form>
 
@@ -35,8 +39,18 @@
         (function(){
             const form = document.getElementById('mcqForm');
             const feedback = document.getElementById('feedback');
+            const scoreEl = document.getElementById('score');
             const nextBtn = document.getElementById('nextBtn');
-            const correctValue = 'b';
+            const correctValue = 'a';
+
+            const scoreKey = 'quizScore';
+            const pageKey = 'quiz_v3_answered';
+            function getScore(){ return Number(localStorage.getItem(scoreKey) || 0); }
+            function setScore(n){ localStorage.setItem(scoreKey, String(n)); }
+            function showScore(){ scoreEl.textContent = 'Score: ' + getScore(); }
+
+            // initialize score display
+            showScore();
 
             nextBtn.addEventListener('click', () => {
                 window.location.href = 'v4.html';
@@ -50,12 +64,21 @@
                     feedback.className = 'feedback wrong';
                     return;
                 }
+                const alreadyAnswered = localStorage.getItem(pageKey) === '1';
                 if(choice === correctValue){
-                    feedback.textContent = 'Correct — &lt;a&gt; creates a hyperlink.';
+                    feedback.textContent = 'Correct — Good job! You said it is kind of how your parents pronounce my nickname.';
                     feedback.className = 'feedback correct';
+                    if(!alreadyAnswered){
+                        setScore(getScore() + 1);
+                        localStorage.setItem(pageKey, '1');
+                        showScore();
+                    }
                 } else {
-                    feedback.textContent = 'Incorrect. Try again or review anchor tag usage.';
+                    feedback.textContent = 'Incorrect. No ma\'m, my nephew\'s name is Cheng.';
                     feedback.className = 'feedback wrong';
+                    if(!alreadyAnswered){
+                        localStorage.setItem(pageKey, '1');
+                    }
                 }
                 Array.from(form.elements).forEach(el => {
                     if(el.type === 'radio' || (el.tagName === 'BUTTON' && el.type === 'submit')) el.disabled = true;

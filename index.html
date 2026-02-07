@@ -5,22 +5,27 @@
         <link rel="icon" type="image/x-icon" href="Logo.png">
         <script>
             function updateScoreNext(points, next){
-                let score = localStorage.getItem("triviaScore") || 0;
+                let score = localStorage.getItem("quizScore") || 0;
                 score = parseInt(score) + points;
-                localStorage.setItem("triviaScore", score)
-                document.getElementById("scoreDisplay").innerText = "Score: "+score;
-
+                localStorage.setItem("quizScore", score);
+                const el = document.getElementById("scoreDisplay");
+                if(el) el.innerText = "Score: "+score;
                 window.location.href = next;
             }
 
             function resetScoreNext(){
-                localStorage.setItem("triviaScore", 0);
-                document.getElementById("scoreDisplay").innerText = "Score: 0";
+                localStorage.setItem("quizScore", 0);
+                // clear per-page answered flags so a new game can score again
+                ['quiz_v1_answered','quiz_v2_answered','quiz_v3_answered','quiz_v4_answered','quiz_v5_answered','quiz_v6_answered','quiz_v7_answered']
+                    .forEach(k => localStorage.removeItem(k));
+                const el = document.getElementById("scoreDisplay");
+                if(el) el.innerText = "Score: 0";
             }
 
             window.onload = function() {
-                let score = localStorage.getItem("triviaScore") || 0;
-                document.getElementById("scoreDisplay").innerText = "Score: "+score;
+                let score = localStorage.getItem("quizScore") || 0;
+                const el = document.getElementById("scoreDisplay");
+                if(el) el.innerText = "Score: "+score;
             }
 
         </script>
@@ -48,8 +53,11 @@
         
     <body style="background-color:rgb(159, 230, 240);">
         <h1>Welcome to JonJeng's World</h1>
-        <p1>Play Trivia?</p>
-        <a onclick = "resetScoreNext()" href = 'question1.html' >Let's Play</a>
+        <p>Play Trivia?</p>
+        <div style="text-align:center;margin:10px">
+            <div id="scoreDisplay" style="margin-bottom:8px">Score: 0</div>
+            <a onclick="resetScoreNext()" href="v1.html">Let's Play</a>
+        </div>
 
     </body>
 </html>

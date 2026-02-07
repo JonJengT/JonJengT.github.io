@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Multiple Choice Question - 4</title>
+    <style>
+        body{font-family:Arial,Helvetica,sans-serif;max-width:700px;margin:40px auto;padding:0 16px}
+        .question{margin-bottom:16px}
+        .options label{display:block;margin:6px 0;cursor:pointer}
+        .feedback{margin-top:12px;font-weight:600}
+        .correct{color:green}
+        .wrong{color:#c00}
+    </style>
+</head>
+<body>
+    <form id="mcqForm" class="mcq">
+        <div class="question">
+            <strong>Question 4:</strong> Where did we go for our first date? <br>
+
+            <img src="C:\Users\jjtho\OneDrive\Documents\GitHub\JonJengT.github.io\IMG_2927.jpeg" alt="BabyC" width="233" height="308">
+
+        </div>
+
+        <div class="options" role="radiogroup" aria-labelledby="q4">
+            <label><input type="radio" name="answer" value="a"> A) MCAD</label>
+            <label><input type="radio" name="answer" value="b"> B) Mall of America</label>
+            <label><input type="radio" name="answer" value="c"> C) Costco</label>
+            <label><input type="radio" name="answer" value="d"> D) Walker Art Center</label>
+        </div>
+
+        <button type="submit">Submit</button>
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+        <div id="score" class="feedback" style="display:inline-block;margin-left:12px" aria-live="polite"></div>
+        <button id="nextBtn" type="button" style="display:none;margin-left:8px">Next</button>
+    </form>
+
+    <script>
+        (function(){
+            const form = document.getElementById('mcqForm');
+            const feedback = document.getElementById('feedback');
+            const scoreEl = document.getElementById('score');
+            const nextBtn = document.getElementById('nextBtn');
+            const correctValue = 'd';
+
+            const scoreKey = 'quizScore';
+            const pageKey = 'quiz_v4_answered';
+            function getScore(){ return Number(localStorage.getItem(scoreKey) || 0); }
+            function setScore(n){ localStorage.setItem(scoreKey, String(n)); }
+            function showScore(){ scoreEl.textContent = 'Score: ' + getScore(); }
+
+            // initialize score display
+            showScore();
+
+            nextBtn.addEventListener('click', () => {
+                window.location.href = 'v5.html';
+            });
+
+            form.addEventListener('submit', function(e){
+                e.preventDefault();
+                const choice = form.answer.value;
+                if(!choice){
+                    feedback.textContent = 'Please select an option.';
+                    feedback.className = 'feedback wrong';
+                    return;
+                }
+                const alreadyAnswered = localStorage.getItem(pageKey) === '1';
+                if(choice === correctValue){
+                    feedback.textContent = 'Correct — Walker Art Center.';
+                    feedback.className = 'feedback correct';
+                    if(!alreadyAnswered){
+                        setScore(getScore() + 1);
+                        localStorage.setItem(pageKey, '1');
+                        showScore();
+                    }
+                } else {
+                    feedback.textContent = 'Incorrect. :\'( How could you forget! ';  
+                    feedback.className = 'feedback wrong';
+                    if(!alreadyAnswered){
+                        localStorage.setItem(pageKey, '1');
+                    }
+                }
+                Array.from(form.elements).forEach(el => {
+                    if(el.type === 'radio' || (el.tagName === 'BUTTON' && el.type === 'submit')) el.disabled = true;
+                });
+                nextBtn.style.display = 'inline';
+            });
+        })();
+    </script>
+</body>
+</html>

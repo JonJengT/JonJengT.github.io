@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Final Score - 6</title>
+    <style>
+        body{font-family:Arial,Helvetica,sans-serif;max-width:700px;margin:40px auto;padding:0 16px;text-align:left}
+        .question{margin-bottom:16px}
+        .feedback{margin-top:12px;font-weight:600}
+        .correct{color:green}
+        .wrong{color:#c00}
+        .center{text-align:center}
+    </style>
+</head>
+<body>
+    <div class="center">
+        <h2>Final Score</h2>
+        <div id="scoreDisplay" style="font-size:18px;margin-bottom:12px">Score: 0 / 5</div>
+        <div id="message" class="feedback" aria-live="polite"></div>
+        <div style="margin-top:14px">
+            <button id="nextBtn" type="button" style="margin-right:8px">Next</button>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            const score = Number(localStorage.getItem('quizScore') || 0);
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const message = document.getElementById('message');
+            const nextBtn = document.getElementById('nextBtn');
+
+            scoreDisplay.textContent = 'Score: ' + score + ' / 5';
+
+            if(score >= 5){
+                message.textContent = 'Perfect score! Proceed to the final question.';
+                message.className = 'feedback correct';
+                nextBtn.addEventListener('click', () => {
+                    window.location.href = 'v7.html';
+                });
+            } else {
+                message.textContent = 'You did not get all questions correct. Please retake the quiz until you get 5/5.';
+                message.className = 'feedback wrong';
+                nextBtn.addEventListener('click', () => {
+                    // send user back to the index where the Let's Play link resets the quiz
+                    window.location.href = 'index.html';
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
